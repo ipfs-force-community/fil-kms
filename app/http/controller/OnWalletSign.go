@@ -92,13 +92,19 @@ func (ws *onWalletSign) check(gCtx *gin.Context) error {
 
 			return nil
 		}
+		gCtx.Keys["proposal"] = &proposal
 	}
 
 	return errors.New("illegal message information")
 }
 
 func (ws *onWalletSign) Handler(gCtx *gin.Context) {
-	signature, err := sign_service.GlobalWalletService.WalletSign(context.TODO(), ws.Addr, ws.Msg, api.MsgMeta{})
+	proposal, ok := gCtx.Keys["proposal"].(*market.DealProposal)
+	if !ok {
+		utils.Error(gCtx, http_response.FAIL, errors.New("illegal message information"))
+		return
+	}
+	signature, err := sign_service.GlobalWalletService.WalletSign(context.TODO(), ws.Addr, ws.Msg, api.MsgMeta{}, proposal)
 	if err != nil {
 		utils.Error(gCtx, http_response.FAIL, err)
 		return

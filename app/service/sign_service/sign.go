@@ -2,10 +2,11 @@ package sign_service
 
 import (
 	"fil-kms/app/keystore"
+
 	"github.com/filecoin-project/lotus/chain/wallet"
 )
 
-var GlobalWalletService *walletService
+var GlobalWalletService *LimitedWallet
 
 type walletService struct {
 	*wallet.LocalWallet
@@ -24,3 +25,5 @@ func NewWalletService(filepath string) (*walletService, error) {
 
 	return &walletService{localwallet}, nil
 }
+
+func (w *walletService) Close() {}

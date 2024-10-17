@@ -1,11 +1,7 @@
 package bootstrap
 
 import (
-	"fil-kms/app/http/router"
-	"fil-kms/app/service/sign_service"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/mitchellh/go-homedir"
 	"net/http"
 	"os"
 	"os/signal"
@@ -13,7 +9,15 @@ import (
 	"syscall"
 	"time"
 
+	"fil-kms/app/config"
+	"fil-kms/app/http/router"
+	"fil-kms/app/service/sign_service"
+
+	"github.com/gin-gonic/gin"
+	"github.com/mitchellh/go-homedir"
+
 	"fil-kms/app/global/variables"
+
 	"github.com/urfave/cli/v2"
 )
 
@@ -62,7 +66,13 @@ func initBeforeRun(cctx *cli.Context) error {
 		return err
 	}
 
-	err = sign_service.Init(filepath.Join(dir, "storage"))
+	cfg, err := config.InitConfig(dir)
+	if err != nil {
+		log.Errorf("init config failed,config: %v,err: %v", cfg, err)
+		return err
+	}
+
+	err = sign_service.Init(filepath.Join(dir, "storage"), cfg)
 	if err != nil {
 		log.Errorf("create repo dir %v failed,err: %v", dir, err)
 		return err
