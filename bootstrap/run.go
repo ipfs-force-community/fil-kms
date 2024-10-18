@@ -77,8 +77,9 @@ func initBeforeRun(cctx *cli.Context) error {
 		log.Errorf("create repo dir %v failed,err: %v", dir, err)
 		return err
 	}
+	defer sign_service.GlobalWalletService.Start(cctx.Context)
 
-	err = initServer()
+	err = initServer(cfg)
 	if err != nil {
 		log.Errorf("init server failed,listen: %v,err: %v", cctx.String("listen"), err)
 		return err
@@ -86,7 +87,7 @@ func initBeforeRun(cctx *cli.Context) error {
 	return nil
 }
 
-func initServer() error {
+func initServer(cfg *config.Config) error {
 	ip := variables.ServerIP
 	port := variables.ServerPort
 
@@ -96,7 +97,7 @@ func initServer() error {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	engine := router.InitRouter()
+	engine := router.InitRouter(cfg)
 	var serverLocal *http.Server
 	var serverRpc *http.Server
 

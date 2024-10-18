@@ -34,12 +34,16 @@ type Filter struct {
 	Limit  string
 	limit  int64
 	Used   int64
-	Start  Time
-	End    Time
+	// Start  Time
+	// End    Time
 }
 
-func (f Filter) GetLimit() int64 {
+func (f *Filter) GetLimit() int64 {
 	return f.limit
+}
+
+func (f *Filter) SetLimit(i int64) {
+	f.limit = i
 }
 
 func InitConfig(basePath string) (*Config, error) {
@@ -121,6 +125,7 @@ func (c *Config) SaveFilter(clientAddr, minerAddr address.Address, f *Filter) er
 	for idx, filter := range c.Filters {
 		if filter.Client.Address() == clientAddr && filter.Miner.Address() == minerAddr {
 			c.Filters[idx] = f
+			return nil
 		}
 	}
 	return fmt.Errorf("filter not found")

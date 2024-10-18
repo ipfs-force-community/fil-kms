@@ -28,18 +28,28 @@ WalletURL = "127.0.0.1:8000"
 WalletToken = "token"
 
 [[Filters]]
-  Client = "t2i4llai5x72clnz643iydyplvjmni74x4vyme7ny"
-  Miner = "t2i4llai5x72clnz643iydyplvjmni74x4vyme7ny"
+  Client = "f3tginto55sulyzzjoy3byof7u7t5vicwa372z4hn4zdhjkdwdkhalsn6mytk53paoc63uf575rfdvqetyvpka"
+  Miner = "t01000"
   Limit = "10Tib"
   Used = 0
-  Start = ""
-  End = ""
 
 [[Filters]]
-  Client = "t2ydigmboo6yjmbyqxyy3eyxifnreamnhdjzybfuy"
-  Miner = "t2ydigmboo6yjmbyqxyy3eyxifnreamnhdjzybfuy"
+  Client = "f3tginto55sulyzzjoy3byof7u7t5vicwa372z4hn4zdhjkdwdkhalsn6mytk53paoc63uf575rfdvqetyvpka"
+  Miner = "t01002"
   Limit = "8Gib"
   Used = 0
-  Start = ""
-  End = ""
+```
+
+### curl
+
+1. 列出钱包地址
+
+```bash
+curl 192.168.200.18:10025/walletList
+```
+
+### 签名
+
+```bash
+curl 192.168.200.18:10025/sign -X POST -H "Content-Type: application/json" -H "Authorization: xxxxx:615d6db49f07e58dc4bab0358bdd3c6cbeebee62" -d '{"addr":"f3tginto55sulyzzjoy3byof7u7t5vicwa372z4hn4zdhjkdwdkhalsn6mytk53paoc63uf575rfdvqetyvpka","msg":"i9gqWCgAAYHiA5IgIIPglc5o7ABVX2jLTVKHZmhsuiR4zioG4NoyVwxO6joVGgABhqD0WDEDmZDZu72VF4zlLsbDhxf0/PtUCsDf9Z4dvMjOlQ7DUcC5N8zE1d28Dhe3Qvf9iUdYQwDoB2R0ZXN0AABAQEA="}'
 ```

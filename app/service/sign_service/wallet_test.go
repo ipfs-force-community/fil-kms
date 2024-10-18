@@ -26,6 +26,7 @@ func TestLimitWallet(t *testing.T) {
 			},
 		},
 	}
+	cfg.Filters[0].SetLimit(10 * 1024 * 1024 * 1024)
 
 	wapi, err := NewRemoteWallet(context.Background(), cfg.WalletURL, cfg.WalletToken)
 	assert.NoError(t, err)
@@ -40,7 +41,7 @@ func TestLimitWallet(t *testing.T) {
 		Provider:  miner,
 	}
 	for i := 0; i < 10; i++ {
-		sig, err := lwapi.WalletSign(context.Background(), client, []byte("hello"), api.MsgMeta{}, prop)
+		sig, err := lwapi.WalletSign(context.Background(), client, []byte("hello"), api.MsgMeta{Type: api.MTUnknown}, prop)
 		assert.NoError(t, err)
 		assert.NotNil(t, sig)
 	}

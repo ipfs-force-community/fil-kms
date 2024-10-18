@@ -3,7 +3,6 @@ package sign_service
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"fil-kms/app/config"
 
@@ -98,18 +97,19 @@ func (w *LimitedWallet) Start(ctx context.Context) {
 				req.res <- result{err: fmt.Errorf("not allowed to sign deals")}
 				continue
 			}
-			now := time.Now()
-			if !filter.Start.Time().IsZero() && filter.Start.Time().After(now) {
-				req.res <- result{err: fmt.Errorf("start time: %v > %s", filter.Start, now)}
-				continue
-			}
-			if !filter.End.Time().IsZero() && filter.End.Time().Before(now) {
-				req.res <- result{err: fmt.Errorf("end time: %v < %s", filter.End, now)}
-				continue
-			}
+			// now := time.Now()
+			// if !filter.Start.Time().IsZero() && filter.Start.Time().After(now) {
+			// 	req.res <- result{err: fmt.Errorf("start time: %v > %s", filter.Start, now)}
+			// 	continue
+			// }
+			// if !filter.End.Time().IsZero() && filter.End.Time().Before(now) {
+			// 	req.res <- result{err: fmt.Errorf("end time: %v < %s", filter.End, now)}
+			// 	continue
+			// }
 
-			if filter.GetLimit() < filter.Used+int64(proposal.PieceSize) {
-				req.res <- result{err: fmt.Errorf("exceed limit: %d < %d", filter.GetLimit(), filter.Used+int64(proposal.PieceSize))}
+			used := filter.Used + int64(proposal.PieceSize)
+			if filter.GetLimit() < used {
+				req.res <- result{err: fmt.Errorf("exceed limit: %d < %d", filter.GetLimit(), used)}
 				continue
 			}
 			sig, err := w.wapi.WalletSign(ctx, req.singer, req.toSign, req.meta)
@@ -117,8 +117,9 @@ func (w *LimitedWallet) Start(ctx context.Context) {
 				req.res <- result{err: err}
 				continue
 			}
+			filter.Used = used
 
-			if err := w.cfg.SaveFilter(proposal.Client, proposal.Provider, filter); err != nil {
+			if err := w.cfg.SaveConfig(); err != nil {
 				req.res <- result{err: err}
 				continue
 			}
