@@ -2,7 +2,6 @@ package controller
 
 import (
 	"bytes"
-	"context"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -90,6 +89,7 @@ func (ws *onWalletSign) check(gCtx *gin.Context) error {
 				return errors.New("clientCollateral must be zero")
 			}
 
+			gCtx.Set("proposal", &proposal)
 			return nil
 		}
 	}
@@ -98,11 +98,18 @@ func (ws *onWalletSign) check(gCtx *gin.Context) error {
 }
 
 func (ws *onWalletSign) Handler(gCtx *gin.Context) {
-	signature, err := sign_service.GlobalWalletService.WalletSign(context.TODO(), ws.Addr, ws.Msg, api.MsgMeta{})
+	proposal, ok := gCtx.Get("proposal")
+	if !ok {
+		utils.Error(gCtx, http_response.FAIL, errors.New("illegal message information"))
+		return
+	}
+	signature, err := sign_service.GlobalWalletService.WalletSign(gCtx.Request.Context(), ws.Addr, ws.Msg, api.MsgMeta{Type: api.MTUnknown},
+		proposal.(*market.DealProposal))
 	if err != nil {
 		utils.Error(gCtx, http_response.FAIL, err)
 		return
 	}
+	log.Infof("proposal: %+v, signature: %v", proposal, signature)
 	utils.Success(gCtx, *signature)
 }
 

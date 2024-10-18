@@ -33,6 +33,8 @@ func Launch() {
 			},
 			&cli.BoolFlag{
 				Name:   "debug",
+				Usage:  "debug mode",
+				Value:  true,
 				Hidden: true,
 			},
 		},
@@ -51,6 +53,8 @@ func beforeAnything(cctx *cli.Context) error {
 	isDebug := cctx.Bool("debug")
 	if isDebug {
 		_ = logging.SetLogLevel("*", "DEBUG")
+		variables.IsDebug = true
+		_ = logging.SetLogLevel("rpc", "INFO")
 	}
 
 	_ip := cctx.String("ip")

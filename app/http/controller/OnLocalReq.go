@@ -3,12 +3,13 @@ package controller
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+
 	"fil-kms/app/global/http_response"
 	"fil-kms/app/http"
 	"fil-kms/app/http/controller/utils"
 	"fil-kms/app/service/sign_service"
-	"github.com/filecoin-project/go-address"
-	"github.com/filecoin-project/lotus/chain/types"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -42,35 +43,36 @@ func (received *onLocalReq) Handler(gCtx *gin.Context) {
 		return
 	}
 	utils.Success(gCtx, result)
-	return
 }
 
 func walletImport(params []byte) ([]byte, error) {
-	var ki types.KeyInfo
+	return nil, fmt.Errorf("not support")
+	// var ki types.KeyInfo
 
-	err := json.Unmarshal(params, &ki)
-	if err != nil {
-		return nil, err
-	}
-	addr, err := sign_service.GlobalWalletService.WalletImport(context.TODO(), &ki)
-	if err != nil {
-		return nil, err
-	}
+	// err := json.Unmarshal(params, &ki)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// addr, err := sign_service.GlobalWalletService.WalletImport(context.TODO(), &ki)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	return addr.Bytes(), nil
+	// return addr.Bytes(), nil
 }
 
 func walletDelete(params []byte) ([]byte, error) {
-	addr, err := address.NewFromBytes(params)
-	if err != nil {
-		return nil, err
-	}
-
-	err = sign_service.GlobalWalletService.WalletDelete(context.TODO(), addr)
-	if err != nil {
-		return nil, err
-	}
-	return nil, nil
+	return nil, fmt.Errorf("not support")
+	// addr, err := address.NewFromBytes(params)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	//
+	// err = sign_service.GlobalWalletService.WalletDelete(context.TODO(), addr)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// return nil, nil
 }
 
 func walletList(params []byte) ([]byte, error) {

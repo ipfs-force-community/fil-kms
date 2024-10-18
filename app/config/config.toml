@@ -1,0 +1,18 @@
+WalletURL = "127.0.0.1:8000"
+WalletToken = "token"
+
+[[Filters]]
+  Client = "t2i4llai5x72clnz643iydyplvjmni74x4vyme7ny"
+  Miner = "t2i4llai5x72clnz643iydyplvjmni74x4vyme7ny"
+  Limit = "10Tib"
+  Used = 0
+  Start = "2020-01-01"
+  End = "2020-01-01"
+
+[[Filters]]
+  Client = "t2ydigmboo6yjmbyqxyy3eyxifnreamnhdjzybfuy"
+  Miner = "t2ydigmboo6yjmbyqxyy3eyxifnreamnhdjzybfuy"
+  Limit = "8Gib"
+  Used = 0
+  Start = "2020-01-01"
+  End = "2020-01-01"
